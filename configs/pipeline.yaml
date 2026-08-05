@@ -1,0 +1,41 @@
+# ==========================================================
+# Detector (YOLO11)
+# ==========================================================
+detector:
+  model: "yolo11m.pt"
+  device: "cuda:0"
+  imgsz: 640
+  conf: 0.35
+  iou: 0.45
+  max_det: 20
+  classes: [0]
+  half: true
+  verbose: false
+
+# ==========================================================
+# Tracker (ByteTrack)
+# ==========================================================
+tracker:
+  tracker: "bytetrack.yaml"
+  imgsz: 640
+
+# ==========================================================
+# Pose (RTMPose)
+# ==========================================================
+pose:
+  model: "rtmpose-m_8xb256-420e_aic-coco-256x192.py"
+  config_file: "configs/rtmpose/rtmpose-m_8xb256-420e_aic-coco-256x192.py"
+  checkpoint_file: "checkpoints/rtmpose-m_simcc-aic-coco_pt-aic-coco_420e-256x192-63eb25f7_20230126.pth"
+  device: "cuda:0"
+  imgsz: 640
+
+# ==========================================================
+# General
+# ==========================================================
+general:
+  seed: 42
+  skip_frames: 0
+  max_frames: null
+  max_tracks: 2
+  num_keypoints: 17
+  val_split: 0.2

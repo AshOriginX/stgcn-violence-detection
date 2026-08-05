@@ -43,3 +43,10 @@ outputs/
 # Temporary
 *.tmp
 *.temp
+
+yolo11m.pt
+test_manifest.csv
+pose_infer_freeze.txt
+ST-GCNpp
+checkpoints
+pyskl/

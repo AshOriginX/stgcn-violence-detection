@@ -79,3 +79,37 @@ def read_video_metadata(video_path: Path) -> Dict:
     cap.release()
 
     return metadata
+
+def open_video(video_path: Path) -> cv2.VideoCapture:
+    """
+    Open a video file and return an initialized VideoCapture object.
+
+    Parameters
+    ----------
+    video_path : Path
+
+    Returns
+    -------
+    cv2.VideoCapture
+        OpenCV video capture object.
+
+    Raises
+    ------
+    FileNotFoundError
+        If the video file does not exist.
+
+    RuntimeError
+        If OpenCV cannot open the video.
+    """
+
+    video_path = Path(video_path)
+
+    if not video_path.exists():
+        raise FileNotFoundError(f"Video not found:\n{video_path}")
+
+    cap = cv2.VideoCapture(str(video_path))
+
+    if not cap.isOpened():
+        raise RuntimeError(f"Failed to open video:\n{video_path}")
+
+    return cap
