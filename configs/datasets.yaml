@@ -1,0 +1,70 @@
+# =============================================================================
+# DATASET CONFIGURATION
+# =============================================================================
+
+datasets:
+  rlvs:
+    name: "RLVS"
+    path: "datasets/RLVS"
+
+  hockeyfight:
+    name: "HockeyFight"
+    path: "datasets/HockeyFight"
+
+  rwf2000:
+    name: "RWF-2000"
+    path: "datasets/RWF-2000"
+
+  unified:
+    path: "datasets/unified"
+
+
+# =============================================================================
+# OUTPUT DIRECTORIES
+# =============================================================================
+
+outputs:
+  reports: "outputs/reports"
+  manifests: "outputs/manifests"
+  detections: "outputs/detections"
+  tracks: "outputs/tracks"
+  keypoints: "outputs/keypoints"
+  pkl: "outputs/pkl"
+
+
+# =============================================================================
+# DATASET LABELS
+# =============================================================================
+
+labels:
+  Fight: 1
+  NonFight: 0
+
+
+# =============================================================================
+# SUPPORTED VIDEO FORMATS
+# =============================================================================
+
+video_extensions:
+  - ".mp4"
+  - ".avi"
+  - ".mov"
+  - ".mkv"
+
+
+# =============================================================================
+# VALIDATION SETTINGS
+# =============================================================================
+
+validation:
+  check_readable: true
+  check_first_frame: true
+  check_zero_byte: true
+  collect_metadata: true
+
+
+# =============================================================================
+# RANDOM SEED
+# =============================================================================
+
+seed: 42
