@@ -12,8 +12,14 @@ This script orchestrates the entire preprocessing pipeline:
 import argparse
 import csv
 import logging
+import pickle
 import sys
+import time
 from pathlib import Path
+import cv2
+
+# Limit OpenCV thread usage
+cv2.setNumThreads(1)
 
 import yaml
 
@@ -82,9 +88,9 @@ def read_manifest(manifest_path: Path) -> list:
         for row in reader:
             entries.append(
                 {
-                    "video_path": Path(row["video_path"]),
+                    "video_path": Path(row["relative_path"]),
                     "video_id": row["video_id"],
-                    "label": int(row["label"]),
+                    "label": int(row["label_id"]),
                 }
             )
 
@@ -179,9 +185,26 @@ def main():
     failed_videos_path.parent.mkdir(parents=True, exist_ok=True)
 
     # Process videos
+    completed_ids = set()
+    annotation_dir = args.output_dir.parent / "annotations"
+
+    if annotation_dir.exists():
+        for f in annotation_dir.glob("*.pkl"):
+            completed_ids.add(f.stem)
+
+            with open(f, "rb") as pf:
+                dataset_builder.add(pickle.load(pf))
+
+    logger.info("Found %d already processed videos.", len(completed_ids))
     logger.info("Processing %d videos...", len(manifest_entries))
 
+    processed_since_start = 0
+
     for i, entry in enumerate(manifest_entries):
+        if entry["video_id"] in completed_ids:
+            logger.info("Skipping %s (already processed)", entry["video_id"])
+            continue
+
         logger.info(
             "Processing video %d/%d: %s",
             i + 1,
@@ -200,8 +223,22 @@ def main():
             # Export to PySKL annotation format
             annotation = exporter.export(video_result)
 
+            # Save annotation immediately to disk
+            annotation_dir.mkdir(parents=True, exist_ok=True)
+            with open(annotation_dir / f"{entry['video_id']}.pkl", "wb") as f:
+                pickle.dump(annotation, f)
+
             # Add to dataset builder
             dataset_builder.add(annotation)
+
+            processed_since_start += 1
+
+            # Cool down every N processed videos
+            cooldown_every = pipeline_config["general"].get("cooldown_every", 10)
+            cooldown_seconds = pipeline_config["general"].get("cooldown_seconds", 60)
+            if processed_since_start % cooldown_every == 0:
+                logger.info("Cooling system for %d seconds...", cooldown_seconds)
+                time.sleep(cooldown_seconds)
 
         except Exception as e:
             logger.error("Failed to process video %s: %s", entry["video_id"], e)

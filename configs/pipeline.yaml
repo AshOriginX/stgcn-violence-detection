@@ -9,7 +9,6 @@ detector:
   iou: 0.45
   max_det: 20
   classes: [0]
-  half: true
   verbose: false
 
 # ==========================================================
@@ -39,3 +38,5 @@ general:
   max_tracks: 2
   num_keypoints: 17
   val_split: 0.2
+  cooldown_every: 10
+  cooldown_seconds: 60

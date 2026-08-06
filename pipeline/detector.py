@@ -53,7 +53,6 @@ class YOLODetector:
             - iou: float, IoU threshold for NMS
             - max_det: int, maximum number of detections
             - classes: list[int], class IDs to detect
-            - half: bool, whether to use FP16
             - verbose: bool, whether to print verbose output
             - warmup: bool, whether to perform warm-up inference
             - warmup_frames: int, number of warm-up frames
@@ -90,7 +89,7 @@ class YOLODetector:
             If required configuration keys are missing.
         """
 
-        required_keys = ["imgsz", "conf", "iou", "max_det", "classes", "half", "verbose"]
+        required_keys = ["imgsz", "conf", "iou", "max_det", "classes", "verbose"]
         missing_keys = [key for key in required_keys if key not in config]
 
         if missing_keys:
@@ -151,7 +150,6 @@ class YOLODetector:
                     iou=self.config["iou"],
                     max_det=self.config["max_det"],
                     classes=self.config["classes"],
-                    half=self.config["half"] and self.device.type == "cuda",
                     verbose=False,
                 )
 
@@ -223,8 +221,6 @@ class YOLODetector:
             YOLO inference results.
         """
 
-        half_precision = self.config["half"] and self.device.type == "cuda"
-        
         return self.model(
             frame,
             imgsz=self.config["imgsz"],
@@ -232,7 +228,6 @@ class YOLODetector:
             iou=self.config["iou"],
             max_det=self.config["max_det"],
             classes=self.config["classes"],
-            half=half_precision,
             verbose=self.config["verbose"],
         )
 
