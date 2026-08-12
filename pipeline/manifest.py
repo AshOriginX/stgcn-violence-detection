@@ -16,15 +16,28 @@ from pipeline.utils import (
 
 def _infer_label(path: Path) -> str:
     """
-    Infer class label from directory names.
+    Infer class label from dataset-specific path/filename conventions.
     """
 
     parts = {p.lower() for p in path.parts}
 
-    if "fight" in parts or "violence" in parts:
+    # RLVS
+    if "violence" in parts or "fight" in parts:
         return "Fight"
 
-    return "NonFight"
+    if "nonviolence" in parts or "nonfight" in parts:
+        return "NonFight"
+
+    # HockeyFight: class encoded in filename prefix.
+    filename = path.name.lower()
+
+    if filename.startswith("fi"):
+        return "Fight"
+
+    if filename.startswith("no"):
+        return "NonFight"
+
+    raise ValueError(f"Unable to infer label for video: {path}")
 
 
 def create_manifest(

@@ -34,19 +34,44 @@ logs/
 *.engine
 *.ckpt
 
-# Dataset
+# Datasets / large local data
 datasets/
+college_violence/
+sample_videos_for_testing/
 
 # Generated outputs
 outputs/
 
-# Temporary
+# Temporary files
 *.tmp
 *.temp
 
+# Local / machine-specific files
 yolo11m.pt
 test_manifest.csv
 pose_infer_freeze.txt
 ST-GCNpp
-checkpoints
+checkpoints/
 pyskl/
+
+# One-off research / audit scripts
+assess_temporal_label_noise.py
+audit_debug_test_entries.py
+audit_label_semantics.py
+audit_pkl.py
+audit_source_videos.py
+audit_window_labeling.py
+compare_normalization.py
+final_normalization_review.py
+investigate_dataset_count.py
+measure_normalized_stats.py
+remove_debug_test_artifacts.py
+verify_normalization_no_count_change.py
+
+# Temporary investigation artifacts
+hockey_missing.csv
+test_problematic.csv
+training_dataset.py
+
+# Debug-only scripts
+scripts/debug_yolo.py
