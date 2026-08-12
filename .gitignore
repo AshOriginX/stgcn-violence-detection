@@ -75,3 +75,14 @@ training_dataset.py
 
 # Debug-only scripts
 scripts/debug_yolo.py
+
+# Model weights
+*.pt
+*.pth
+*.onnx
+*.engine
+*.ckpt
+
+# Final production checkpoint intentionally tracked
+!outputs/checkpoints/
+!outputs/checkpoints/best.pt
